@@ -39,16 +39,20 @@
   <p class="d-inline">Amenities:</p>
   <span class="amenities">
     {% if cafe.has_sockets == 1 %}
-      <img src="{{ url_for('static', filename='assets/img/sockets.png') }}" alt="has sockets" class="icon-img">
+      <img src="{{ url_for('static', filename='assets/img/sockets.png') }}"
+           alt="has sockets" class="icon-img" title="Cafe has charging sockets!">
     {% endif %}
     {% if cafe.has_toilet == 1 %}
-      <img src="{{ url_for('static', filename='assets/img/toilet.png') }}" alt="has toilet" class="icon-img">
+      <img src="{{ url_for('static', filename='assets/img/toilet.png') }}"
+           alt="has toilet" class="icon-img" title="Cafe has toilets!">
     {% endif %}
     {% if cafe.has_wifi == 1 %}
-      <img src="{{ url_for('static', filename='assets/img/has_wifi.png') }}" alt="has wifi" class="icon-img">
+      <img src="{{ url_for('static', filename='assets/img/has_wifi.png') }}"
+           alt="has wifi" class="icon-img" title="Cafe has WiFi!">
     {% endif %}
     {% if cafe.can_take_calls == 1 %}
-      <img src="{{ url_for('static', filename='assets/img/can_take_calls.png') }}" alt="can take calls" class="icon-img">
+      <img src="{{ url_for('static', filename='assets/img/can_take_calls.png') }}"
+           alt="can take calls" class="icon-img" title="Cafe can take calls!">
     {% endif %}
   </span>
 

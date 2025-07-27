@@ -63,8 +63,6 @@ class BlogPost(db.Model):
     title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
     subtitle: Mapped[str] = mapped_column(String(250), nullable=False)
     date: Mapped[str] = mapped_column(String(250), nullable=False)
-    body: Mapped[str] = mapped_column(Text, nullable=False)
-    img_url: Mapped[str] = mapped_column(String(250), nullable=False)
     git_hub_url: Mapped[str] = mapped_column(String(250), nullable=False)
 
 
@@ -172,8 +170,6 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
-            body=form.body.data,
-            img_url=form.img_url.data,
             author=current_user,
             date=date.today().strftime("%B %d, %Y"),
             git_hub_url=form.git_hub_url.data
@@ -192,18 +188,14 @@ def edit_post(post_id):
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
-        img_url=post.img_url,
         git_hub_url=post.git_hub_url,
         author=post.author,
-        body=post.body
     )
     if edit_form.validate_on_submit():
         post.title = edit_form.title.data
         post.subtitle = edit_form.subtitle.data
-        post.img_url = edit_form.img_url.data
         post.git_hub_url = edit_form.git_hub_url.data
         post.author = current_user
-        post.body = edit_form.body.data
         db.session.commit()
         return redirect(url_for("get_all_posts", post_id=post.id))
     return render_template("make-post.html", form=edit_form, is_edit=True, current_user=current_user)
@@ -245,5 +237,6 @@ def send_email(name, email, phone, message):
 
 
 if __name__ == "__main__":
+    print(">>> ROUTES AVAILABLE:")
+    print(app.url_map)
     app.run(debug=False, port=5001)
-    print("Flask app loaded. Routes:", app.url_map)
