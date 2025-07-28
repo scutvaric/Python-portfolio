@@ -84,6 +84,16 @@ def login_only(f):
 
     return decorated_function
 
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # If id is not 1 then return abort with 403 error
+        if current_user.id != 1:
+            return abort(403)
+        # Otherwise continue with the route function
+        return f(*args, **kwargs)
+
+    return decorated_function
 
 # Register new users into the User database
 @app.route('/register', methods=["GET", "POST"])
@@ -253,7 +263,7 @@ def edit_task(task_id):
 
 # Use a decorator so only an admin user can delete a post
 @app.route("/delete/<int:task_id>")
-@login_only
+@admin_only
 def delete_task(task_id):
     task_to_delete = db.get_or_404(Task, task_id)
     db.session.delete(task_to_delete)
