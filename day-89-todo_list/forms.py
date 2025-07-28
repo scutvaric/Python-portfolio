@@ -1,14 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField
+from wtforms import StringField, SubmitField, PasswordField, DateField
 from wtforms.validators import DataRequired, URL
 from flask_ckeditor import CKEditorField
 
 
 # WTForm for creating a blog post
-class CreatePostForm(FlaskForm):
-    title = StringField("Blog Post Title", validators=[DataRequired()])
-    subtitle = StringField("Subtitle", validators=[DataRequired()])
-    git_hub_url = StringField("GitHub URL", validators=[DataRequired(), URL()])
+class CreateTaskForm(FlaskForm):
+    task = StringField("Write a task you need to do?", validators=[DataRequired()])
+    due_date = DateField("What's your due date for this task?", validators=[DataRequired()])
     submit = SubmitField("Submit Post")
 
 

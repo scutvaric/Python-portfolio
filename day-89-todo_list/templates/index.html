@@ -1,0 +1,164 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+        class="masthead"
+        style="background-image: url('../static/assets/img/home-bg.jpg')"
+>
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>Task Manager</h1>
+                    <span class="subheading">Website where you can track your tasks.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            <!-- Post preview-->
+            <form method="get" action="{{ url_for('get_all_tasks') }}"
+                  class="filter-form d-flex align-items-center gap-2 mb-3">
+
+                <label class="form-label small-label">Author:</label>
+                <div class="pill-wrapper">
+                    <select name="author" id="author" class="form-select pill-select">
+                        <option value="">All</option>
+                        {% for user in all_users %}
+                        <option value="{{ user.name }}"
+                                {% if
+                        'author' in query_params and query_params['author'] == user.name %}selected{% endif %}>
+                        {{ user.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <label class="form-label small-label">Sort by:</label>
+                <div class="pill-wrapper">
+                    <select name="sort" id="sort" class="form-select pill-select">
+                        <option value="">--</option>
+                        <option value="date_asc" {% if
+                        'sort' in query_params and query_params['sort'] == 'date_asc' %}selected{% endif %}>Date
+                        ↑</option>
+                        <option value="date_desc" {% if
+                        'sort' in query_params and query_params['sort'] == 'date_desc' %}selected{% endif %}>Date
+                        ↓</option>
+                        <option value="due_asc" {% if
+                        'sort' in query_params and query_params['sort'] == 'due_asc' %}selected{% endif %}>Due Date
+                        ↑</option>
+                        <option value="due_desc" {% if
+                        'sort' in query_params and query_params['sort'] == 'due_desc' %}selected{% endif %}>Due Date
+                        ↓</option>
+                        <option value="author" {% if
+                        'sort' in query_params and query_params['sort'] == 'author' %}selected{% endif %}>Author
+                        A→Z</option>
+                    </select>
+                </div>
+
+                <label class="form-label small-label">Status:</label>
+                <div class="pill-wrapper">
+                    <select name="status" id="status" class="form-select pill-select">
+                        <option value="incomplete" {% if
+                        'status' not in query_params or query_params['status'] == 'incomplete' %}selected{% endif
+                        %}>Incomplete</option>
+                        <option value="completed" {% if
+                        'status' in query_params and query_params['status'] == 'completed' %}selected{% endif
+                        %}>Completed</option>
+                        <option value="all" {% if
+                        'status' in query_params and query_params['status'] == 'all' %}selected{% endif %}>All</option>
+                    </select>
+                </div>
+
+                <button type="submit"
+                        id="apply-filter-btn"
+                        class="btn btn-sm btn-primary"
+                        style="display: none;">
+                    Apply
+                </button>
+            </form>
+            {% for task in all_tasks %}
+            <form method="POST" action="{{ url_for('update_task', task_id=task.id) }}">
+                <div class="post-preview {% if task.task_completed %}task-done{% endif %}">
+                    <div class="task-container">
+                        <input type="checkbox"
+                               class="big-checkbox"
+                               name="task_done"
+                               id="taskCheckbox-{{ task.id }}"
+                               {% if task.task_completed %}checked{% endif %}
+                               {% if task.task_completed %}disabled{% endif %}>
+
+                        <div class="task-text-wrapper">
+                            <div class="task-main-line">
+                                <input type="text"
+                                       name="task_title"
+                                       value="{{ task.task }}"
+                                       class="task-title-input"
+                                       id="task-title-input-{{ task.id }}"
+                                       {% if task.task_completed %}readonly{% endif %}>
+
+                                <span class="due-pill {% if task.task_completed %}crossed-out{% endif %}">
+              Due:
+              <input type="date"
+                     name="due_date"
+                     id="due-input-{{ task.id }}"
+                     value="{{ task.due_date.strftime('%Y-%m-%d') }}"
+                     class="due-pill-input"
+                     {% if task.task_completed %}readonly{% endif %}>
+            </span>
+
+                                <button type="submit"
+                                        name="action"
+                                        value="save"
+                                        id="save-btn-{{ task.id }}"
+                                        class="btn btn-primary btn-sm"
+                                        style="display: none;">
+                                    Save
+                                </button>
+                            </div>
+
+                            <div class="task-meta-line">
+                                <em>Posted by {{ task.author.name }} on {{ task.date.strftime("%B %d, %Y") }}</em>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                                name="action"
+                                value="confirm"
+                                class="btn btn-primary btn-sm float-right"
+                                id="done-btn-{{ task.id }}"
+                                style="display: none;">
+                            Confirm
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <hr class="my-4"/>
+            {% endfor %}
+
+
+            <!-- New Post -->
+            <!-- Only show Create Post button if user id is 1 (admin user) -->
+            {% if current_user.is_authenticated %}
+            <div class="d-flex justify-content-end mb-4">
+                <a
+                        class="btn btn-primary float-right"
+                        href="{{url_for('add_new_task')}}"
+                >Create New Task</a
+                >
+            </div>
+            {% endif %}
+
+            <!-- Pager-->
+            <!--      <div class="d-flex justify-content-end mb-4">-->
+            <!--        <a class="btn btn-secondary text-uppercase" href="#!">Older Posts →</a>-->
+            <!--      </div>-->
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}

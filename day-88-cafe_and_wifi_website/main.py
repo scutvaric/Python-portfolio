@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text, Float
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+from forms import CreateCafeForm, RegisterForm, LoginForm, CommentForm
 import os
 from dotenv import load_dotenv
 load_dotenv("variables.env")
@@ -149,7 +149,7 @@ def get_all_cafes():
 # Use a decorator so only an admin user can create new posts
 @app.route("/new-cafe", methods=["GET", "POST"])
 def add_new_cafe():
-    form = CreatePostForm()
+    form = CreateCafeForm()
     if form.validate_on_submit():
         new_cafe = Cafes(
             name=form.name.data,
@@ -180,7 +180,7 @@ def delete_cafe(cafe_id):
 @admin_only
 def edit_cafe(cafe_id):
     cafe = db.get_or_404(Cafes, cafe_id)
-    edit_form = CreatePostForm(
+    edit_form = CreateCafeForm(
         name=cafe.name,
         map_url=cafe.map_url,
         img_url=cafe.img_url,

@@ -6,7 +6,7 @@ from flask_ckeditor import CKEditorField
 
 
 # WTForm for creating a blog post
-class CreatePostForm(FlaskForm):
+class CreateCafeForm(FlaskForm):
     name = StringField("Cafe Name", validators=[DataRequired()])
     map_url = StringField("Cafe Location URL", validators=[DataRequired(), URL()])
     img_url = StringField("Cafe Image URL", validators=[DataRequired(), URL()])
@@ -42,9 +42,3 @@ class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Let Me In!")
-
-
-# Create a form to add comments
-class CommentForm(FlaskForm):
-    comment_text = CKEditorField("Comment", validators=[DataRequired()])
-    submit = SubmitField("Submit Comment")
