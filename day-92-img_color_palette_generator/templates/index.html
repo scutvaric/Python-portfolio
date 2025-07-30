@@ -1,0 +1,73 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+        class="masthead"
+        style="background-image: url('../static/assets/img/home-bg.jpg')"
+>
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-12 col-lg-10 col-xl-9">
+                <div class="site-heading">
+                    <h1 style="font-size: 3rem;">Image Color Palette Generator</h1>
+                    <span class="subheading" style="font-size: 1.5rem;">Easily upload any image and instantly discover its 10 most common colors</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+
+            <!-- Upload Form -->
+            <form method="POST" action="/" enctype="multipart/form-data" class="mb-4">
+                <input type="file" name="image" id="fileInput" accept="image/*" style="display: none;"
+                       onchange="this.form.submit()"/>
+                <a href="#" class="btn btn-primary"
+                   onclick="document.getElementById('fileInput').click(); return false;">
+                    Upload an image
+                </a>
+            </form>
+
+            <!-- Uploaded Image -->
+            {% if image_url %}
+            <div class="mb-4">
+                <img src="{{ image_url }}" alt="Uploaded image"
+                     style="max-width: 100%; max-height: 400px;"/>
+            </div>
+            {% endif %}
+
+            <!-- Top 10 Colors -->
+            {% if top_colors %}
+            <div class="text-center mt-4">
+                <h5 class="mb-3">Top 10 Dominant Colors</h5>
+                <div class="row justify-content-center">
+                    {% for i in range(0, top_colors|length, 5) %}
+                    <div class="col-md-6">
+                        {% for hex in top_colors[i:i+5] %}
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="color-box me-3"
+                                 style="width: 50px; height: 50px;
+                          background-color: {{ hex }};
+                          border-radius: 4px; border: 1px solid #ccc;">
+                            </div>
+                            <small class="text-muted color-code" style="cursor: pointer;"
+                                   onclick="copyToClipboard(this)">
+                                {{ hex }}
+                            </small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div id="copiedTooltip" class="mt-2 text-success" style="display: none;">Copied!</div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
