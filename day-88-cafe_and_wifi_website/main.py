@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text, Float
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import CreateCafeForm, RegisterForm, LoginForm, CommentForm
+from forms import CreateCafeForm, RegisterForm, LoginForm
 import os
 from dotenv import load_dotenv
 load_dotenv("variables.env")

@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template, url_for
 from imageio.v2 import imread
-import numpy as np
 from flask_bootstrap import Bootstrap5
 from flask_ckeditor import CKEditor
 import os

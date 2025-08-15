@@ -1,0 +1,38 @@
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+        class="masthead"
+        style="background-image: url('../static/assets/img/home-bg.jpg')"
+>
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-12 col-lg-10 col-xl-9">
+                <div class="site-heading">
+                    <h1 style="font-size: 3rem;">German To English Translator</h1>
+                    <span class="subheading" style="font-size: 1.5rem;">A German-to-English translator converts written or spoken
+                        German into clear, accurate English.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Main Content-->
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7 text-center">
+
+            <!-- Upload Form -->
+            <form method="POST" action="/" enctype="multipart/form-data" class="mb-4">
+                <input type="text" name="text" id="textInput"
+                       onchange="this.form.submit()"/>
+                <a href="#" class="btn btn-primary"
+                   onclick="document.getElementById('textInput').click(); return false;">
+                    Translate
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include "footer.html" %}
