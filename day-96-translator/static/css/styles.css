@@ -11028,3 +11028,7 @@ header.masthead .post-heading .meta a {
 .delete-link:hover {
   color: #0085A1;
 }
+
+ .table.table-striped{
+    --bs-table-striped-bg: #eaf4ff;
+  }

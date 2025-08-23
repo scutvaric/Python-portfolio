@@ -44,7 +44,7 @@ class Task(db.Model):
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     author = relationship("User", foreign_keys=[author_id], back_populates="tasks")
 
-    task: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+    task: Mapped[str] = mapped_column(String(250), nullable=False)
 
     date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     due_date: Mapped[datetime] = mapped_column(DateTime, nullable=False)

@@ -5,14 +5,13 @@ from flask_ckeditor import CKEditor
 from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
-from sqlalchemy import Integer, String, Text
+from sqlalchemy import Integer, String
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import CreatePostForm, RegisterForm, LoginForm
 import os
 from dotenv import load_dotenv
 load_dotenv("variables.env")
-# Optional: add contact me email functionality (Day 60)
 import smtplib
 
 
@@ -177,7 +176,7 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form=form, current_user=current_user)
+    return render_template("make-item.html", form=form, current_user=current_user)
 
 
 # Use a decorator so only an admin user can edit a post
@@ -198,7 +197,7 @@ def edit_post(post_id):
         post.author = current_user
         db.session.commit()
         return redirect(url_for("get_all_posts", post_id=post.id))
-    return render_template("make-post.html", form=edit_form, is_edit=True, current_user=current_user)
+    return render_template("make-item.html", form=edit_form, is_edit=True, current_user=current_user)
 
 
 # Use a decorator so only an admin user can delete a post

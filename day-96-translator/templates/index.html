@@ -1,4 +1,5 @@
 {% include "header.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
 
 <!-- Page Header-->
 <header
@@ -23,16 +24,78 @@
         <div class="col-md-10 col-lg-8 col-xl-7 text-center">
 
             <!-- Upload Form -->
-            <form method="POST" action="/" enctype="multipart/form-data" class="mb-4">
-                <input type="text" name="text" id="textInput"
-                       onchange="this.form.submit()"/>
-                <a href="#" class="btn btn-primary"
-                   onclick="document.getElementById('textInput').click(); return false;">
-                    Translate
-                </a>
-            </form>
+            {{ render_form(form, novalidate=True) }}
         </div>
     </div>
+    {% if results %}
+    {% set entry = results[0] %}
+    <table class="table table-striped mt-4">
+        <tbody>
+        <tr>
+            <td><strong>Word to translate:</strong></td>
+            <td>{{ entry["meta"]["id"] }}</td>
+        </tr>
+
+        <tr>
+            <td><strong>Definition:</strong></td>
+            {# easiest: first shortdef string #}
+            <td>{{ entry.get("shortdef", []) | first | default("—") }}</td>
+            {# If you prefer the long path instead, use:
+            <td>{{ entry["def"][0]["sseq"][0][0][1]["dt"][0][1] }}</td>
+            #}
+        </tr>
+
+        <tr>
+            <td><strong>Usage in a sentence:</strong></td>
+            <td>
+                {% set dt = entry["def"][0]["sseq"][0][0][1]["dt"] %}
+                {% for item in dt if item[0] == "vis" %}
+                {% if loop.first %}
+                {{ item[1][0]["t"]
+                | replace("{it}", "<i>")
+                | replace("{/it}", "</i>")
+                | safe }}
+                {% endif %}
+                {% endfor %}
+            </td>
+        </tr>
+
+        <tr>
+            <td><strong>Synonyms:</strong></td>
+            <td>
+                {% set syn_groups = entry["meta"].get("syns", []) %}
+                {% set all_syns = syn_groups | sum(start=[]) %}
+                {% if all_syns %}
+                <ul>
+                    {% for syn in all_syns[:5]%}
+                    <li>{{ syn }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <strong>No synonyms</strong>
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td><strong>Antonyms:</strong></td>
+            <td>
+                {% set ant_groups = entry["meta"].get("ants", []) %}
+                {% set all_ants = ant_groups | sum(start=[]) %}
+                {% if all_ants %}
+                <ul>
+                    {% for ant in all_ants[:5] %}
+                    <li>{{ ant }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <strong>No antonyms</strong>
+                {% endif %}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    {% endif %}
 </div>
 
 {% include "footer.html" %}
